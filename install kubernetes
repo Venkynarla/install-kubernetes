@@ -1,21 +1,23 @@
 ****************install kubectl*********************************
 #Download the latest release with the command
-1) curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+   $ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 #Validate the binary
-2) curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+   $ curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
 #Validate the kubectl binary against the checksum file
-3) echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+   $ echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
 #If valid, the output is --kubectl: OK
 # Install kubectl
-4) sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-5) kubectl version --client --output=(yaml,json,etc....)
+   $ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+   $ kubectl version --client --output=(yaml,json,etc....)
 ################install minikube-debian#########################
 # to add binaries 
-debian----1) curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+#debian
+   $ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
              sudo dpkg -i minikube_latest_amd64.deb
-binary----1) curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+#binary 
+   $ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
              sudo install minikube-linux-amd64 /usr/local/bin/minikube
-2) minikube start --vm-driver=none (to start minikube with no driver)
+   $ minikube start --vm-driver=none (to start minikube with no driver)
 *****************install cri-dockered*****************************
 #On Linux, you can use wget:
    $ wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.2.0/cri-dockerd-v0.2.0-linux-amd64.tar.gz
