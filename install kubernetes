@@ -1,0 +1,37 @@
+****************install kubectl*********************************
+#Download the latest release with the command
+1) curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+#Validate the binary
+2) curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+#Validate the kubectl binary against the checksum file
+3) echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+#If valid, the output is --kubectl: OK
+# Install kubectl
+4) sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+5) kubectl version --client --output=(yaml,json,etc....)
+################install minikube-debian#########################
+# to add binaries 
+debian----1) curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+             sudo dpkg -i minikube_latest_amd64.deb
+binary----1) curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+             sudo install minikube-linux-amd64 /usr/local/bin/minikube
+2) minikube start --vm-driver=none (to start minikube with no driver)
+*****************install cri-dockered*****************************
+#On Linux, you can use wget:
+   $ wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.2.0/cri-dockerd-v0.2.0-linux-amd64.tar.gz
+   $ tar xvf cri-dockerd-v0.2.0-linux-amd64.tar.gz
+   $ sudo mv ./cri-dockerd /usr/local/bin/ 
+   $ cri-dockerd --help
+     You should see the help output explaining the flags you can use with the tool.
+#Start the service on Linux
+#Now you’ll need to configure systemd:
+   $ wget https://raw.githubusercontent.com/Mirantis/cri-dockerd/master/packaging/systemd/cri-docker.service
+   $ wget https://raw.githubusercontent.com/Mirantis/cri-dockerd/master/packaging/systemd/cri-docker.socket
+   $ sudo mv cri-docker.socket cri-docker.service /etc/systemd/system/
+   $ sudo sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/system/cri-docker.service
+#start the service with cri-dockerd enabled:
+   $ systemctl daemon-reload
+   $ systemctl enable cri-docker.service
+   $ systemctl enable --now cri-docker.socket
+#You can verify that the service is running with:
+   $ systemctl status cri-docker.socket
